@@ -16,7 +16,7 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 # If you have SQLite database, uncomment and adjust the path
-# COPY Database/app.db .
+COPY Database/app.db .
 
 EXPOSE 80
 EXPOSE 443
