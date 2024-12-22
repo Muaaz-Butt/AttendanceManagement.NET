@@ -325,3 +325,4 @@
 /home/zayyadbutt/Documents/AttendanceManagement.NET/AttendanceManagementSystem/obj/Debug/net8.0/AttendanceManagementSystem.pdb
 /home/zayyadbutt/Documents/AttendanceManagement.NET/AttendanceManagementSystem/obj/Debug/net8.0/AttendanceManagementSystem.genruntimeconfig.cache
 /home/zayyadbutt/Documents/AttendanceManagement.NET/AttendanceManagementSystem/obj/Debug/net8.0/ref/AttendanceManagementSystem.dll
+/home/zayyadbutt/Documents/AttendanceManagement.NET/AttendanceManagementSystem/obj/Debug/net8.0/AttendanceManagementSystem.sourcelink.json
