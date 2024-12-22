@@ -1,0 +1,277 @@
+@model IEnumerable<AttendanceManagementSystem.Models.Course>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .page-header {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+            border-left: 4px solid #4299e1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-header h2 {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 1.8rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: #4299e1;
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #3182ce;
+        }
+
+        .courses-table {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+        }
+
+        .table th {
+            background-color: #f8fafc;
+            color: #2c3e50;
+            font-weight: 600;
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .table td {
+            padding: 1rem;
+            color: #4a5568;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .badge-blue {
+            background-color: #ebf5ff;
+            color: #4299e1;
+        }
+
+        .empty-state {
+            padding: 3rem;
+            text-align: center;
+            color: #718096;
+        }
+
+        .action-cell {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .delete-btn {
+            padding: 0.5rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: none;
+            color: #e53e3e;
+        }
+
+        .delete-btn:hover {
+            background-color: #fff5f5;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 15% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .modal-title {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-delete {
+            background-color: #e53e3e;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color: #c53030;
+        }
+
+        .btn-cancel {
+            background-color: #edf2f7;
+            color: #4a5568;
+        }
+
+        .btn-cancel:hover {
+            background-color: #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <h2>My Courses</h2>
+            <a href="@Url.Action("Create", "Course")" class="btn btn-primary">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                Add New Course
+            </a>
+        </div>
+
+        <div class="courses-table">
+      @if (Model != null && Model.Any())
+      {
+                  <table class="table">
+                      <thead>
+                          <tr>
+                              <th>Course Name</th>
+                              <th>Course Code</th>
+                              <th>Credit Hours</th>
+                              <th>Actions</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+            @foreach (var course in Model)
+            {
+                                <tr>
+                                    <td>@course.CourseName</td>
+                                    <td>
+                                        <span class="badge badge-blue">@course.CourseCode</span>
+                                    </td>
+                                    <td>@course.CreditHours</td>
+                                    <td>
+                                        <button onclick="confirmDelete(@course.Id, '@course.CourseName')" class="delete-btn" title="Delete Course">
+                                            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
+                                    </td>
+                                </tr>
+            }
+                      </tbody>
+                  </table>
+      }
+      else
+      {
+                  <div class="empty-state">
+                      <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="mx-auto mb-4">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                      </svg>
+                      <p>No courses found. Click the 'Add New Course' button to create your first course.</p>
+                  </div>
+      }
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-title">Delete Course</h3>
+            <p>Are you sure you want to delete "<span id="courseNameToDelete"></span>"?</p>
+            <p>This action cannot be undone.</p>
+            <div class="modal-actions">
+                <form id="deleteForm" method="post">
+          @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-delete">Delete Course</button>
+                </form>
+                <button onclick="closeModal()" class="btn btn-cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function confirmDelete(courseId, courseName) {
+            document.getElementById('deleteModal').style.display = 'block';
+            document.getElementById('courseNameToDelete').textContent = courseName;
+            document.getElementById('deleteForm').action = '/Course/Delete/' + courseId;
+        }
+
+        function closeModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target === document.getElementById('deleteModal')) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>

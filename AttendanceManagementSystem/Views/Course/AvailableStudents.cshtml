@@ -1,0 +1,301 @@
+@model IEnumerable<AttendanceManagementSystem.Models.User>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Students for Enrollment</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .page-header {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+            border-left: 4px solid #4299e1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-header h2 {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 1.8rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: #4299e1;
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #3182ce;
+        }
+
+        .courses-table {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+        }
+
+        .table th {
+            background-color: #f8fafc;
+            color: #2c3e50;
+            font-weight: 600;
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .table td {
+            padding: 1rem;
+            color: #4a5568;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .badge-blue {
+            background-color: #ebf5ff;
+            color: #4299e1;
+        }
+
+        .empty-state {
+            padding: 3rem;
+            text-align: center;
+            color: #718096;
+        }
+
+        .action-cell {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .delete-btn {
+            padding: 0.5rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: none;
+            color: #e53e3e;
+        }
+
+        .delete-btn:hover {
+            background-color: #fff5f5;
+        }
+
+        /* Back to Subjects Button */
+        .back-btn {
+            background-color: #edf2f7;
+            color: #4a5568;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-btn:hover {
+            background-color: #e2e8f0;
+            color: #2c3e50;
+        }
+
+        .back-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 15% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .modal-title {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-delete {
+            background-color: #e53e3e;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color: #c53030;
+        }
+
+        .btn-cancel {
+            background-color: #edf2f7;
+            color: #4a5568;
+        }
+
+        .btn-cancel:hover {
+            background-color: #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <h2>Available Students for Enrollment</h2>
+        </div>
+
+        <div class="courses-table">
+            @if (Model != null && Model.Any())
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var student in Model)
+                        {
+                            <tr>
+                                <td>@student.Name</td>
+                                <td>@student.Email</td>
+                                <td>
+                                    <form asp-controller="Course" asp-action="EnrollStudent" method="post">
+                                        <input type="hidden" name="courseId" value="@ViewBag.CourseId" />
+                                        <input type="hidden" name="studentId" value="@student.Id" />
+                                        <button type="submit" class="btn btn-primary">Enroll</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="empty-state">
+                    <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="mx-auto mb-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                    <p>No students found. Please ensure that students are added for enrollment.</p>
+                </div>
+            }
+        </div>
+
+        <div>
+            <a asp-action="Subjects" class="btn btn-secondary back-btn">
+                <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H6m0 0l6 6m-6-6l6-6" />
+                </svg>
+                Back to Subjects
+            </a>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-title">Delete Student</h3>
+            <p>Are you sure you want to delete "<span id="studentNameToDelete"></span>"?</p>
+            <p>This action cannot be undone.</p>
+            <div class="modal-actions">
+                <form id="deleteForm" method="post">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-delete">Delete Student</button>
+                </form>
+                <button onclick="closeModal()" class="btn btn-cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function closeModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target === document.getElementById('deleteModal')) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>

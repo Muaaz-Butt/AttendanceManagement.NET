@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h2 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #34495e;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+        }
+
+        .btn-primary {
+            background-color: #4299e1;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            width: 100%;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .btn-primary:hover {
+            background-color: #3182ce;
+        }
+
+        .login-section {
+            text-align: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .login-text {
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-link {
+            display: inline-block;
+            color: #4299e1;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border: 2px solid #4299e1;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .login-link:hover {
+            background-color: #4299e1;
+            color: white;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Create Account</h2>
+        <form asp-action="Register" method="post">
+            <div class="form-group">
+                <label for="Name">Full Name</label>
+                <input type="text" class="form-control" id="Name" name="Name" required />
+            </div>
+            <div class="form-group">
+                <label for="Email">Email Address</label>
+                <input type="email" class="form-control" id="Email" name="Email" required />
+            </div>
+            <div class="form-group">
+                <label for="Password">Password</label>
+                <input type="password" class="form-control" id="Password" name="Password" required />
+            </div>
+            
+            <button type="submit" class="btn-primary">Create Account</button>
+        </form>
+
+        <div class="login-section">
+            <p class="login-text">Already have an account?</p>
+            <a href="/Account/Login" class="login-link">Log In</a>
+        </div>
+    </div>
+</body>
+</html>

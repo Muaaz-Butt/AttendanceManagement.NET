@@ -1,0 +1,134 @@
+@model IEnumerable<AttendanceManagementSystem.Models.Course>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .page-header {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+            border-left: 4px solid #4299e1;
+        }
+
+        .page-header h2 {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 1.8rem;
+        }
+
+        .courses-table {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th {
+            background-color: #f8fafc;
+            color: #2c3e50;
+            font-weight: 600;
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .table td {
+            padding: 1rem;
+            color: #4a5568;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            background-color: #ebf5ff;
+            color: #4299e1;
+        }
+
+        .action-link {
+            color: #4299e1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .action-link:hover {
+            color: #3182ce;
+        }
+
+        .empty-state {
+            padding: 3rem;
+            text-align: center;
+            color: #718096;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <h2>View Attendance</h2>
+        </div>
+
+        <div class="courses-table">
+            @if (Model != null && Model.Any())
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Course Name</th>
+                            <th>Course Code</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var course in Model)
+                        {
+                            <tr>
+                                <td>@course.CourseName</td>
+                                <td>
+                                    <span class="badge">@course.CourseCode</span>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("SubjectAttendanceReport", "Teacher", new { courseId = course.Id })" 
+                                       class="action-link">
+                                        View Attendance Report
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="empty-state">
+                    <p>No courses found.</p>
+                </div>
+            }
+        </div>
+    </div>
+</body>
+</html>
